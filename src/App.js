@@ -2,37 +2,25 @@ import "./App.scss";
 import Header from "./components/Header";
 import Container from "react-bootstrap/Container";
 import TableUsers from "./components/TableUsers";
-import ModalAddNew from "./components/ModalAddNew";
-import { useState } from "react";
+import { ToastContainer } from "react-toastify";
+
 
 function App() {
-  const [isShowModal, setIsShowModal] = useState(false);
-
-  const handleClose = () => {
-    setIsShowModal(false);
-  };
   return (
-    <div className="app-container">
-      <Header />
-      <Container>
-        <div className="my-3 add-new">
-          <span>
-            <b>List User</b>
-          </span>
-          <button
-            className="btn btn-success"
-            onClick={() => {
-              setIsShowModal(true);
-            }}
-          >
-            Add New User
-          </button>
-        </div>
-        <TableUsers />
-      </Container>
-
-      <ModalAddNew show={isShowModal} handleClose={handleClose} />
-    </div>
+    <>
+      <div className="app-container">
+        <Header />
+        <Container>
+          <TableUsers />
+        </Container>
+      </div>
+      <ToastContainer
+        position="top-right" // Vị trí của thông báo: top-right, top-left, bottom-right, etc.
+        autoClose={3000} // Tự động đóng sau 3000ms (3 giây)
+        newestOnTop={false} // Toast mới có xuất hiện trên cùng không?
+        theme="dark" // Chủ đề của toast (light, dark, hoặc colored)
+      />
+    </>
   );
 }
 

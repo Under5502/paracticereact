@@ -1,32 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
-import { toast } from "react-toastify";
-import { postCreateUser } from "../services/UserServices";
-
-function ModelAddNew(prop) {
-  const { show, handleClose, handleUpdate } = prop;
+function ModalEditUser(prop) {
+  const { show, handleClose, dataUserEdit } = prop;
   const [name, setName] = useState("");
   const [job, setJob] = useState("");
 
-  const handleSave = async () => {
-    let res = await postCreateUser(name, job);
-    if (res && res.id) {
-      handleClose("");
-      setName("");
-      setJob("");
-      toast.success("Success Gut!!!!");
-      handleUpdate({ first_name: name, id: res.id });
-    } else {
-      toast.error("Error...");
+  const handleEdit = () => {};
+
+  useEffect(() => {
+    if (show) {
+      setName(dataUserEdit.first_name);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataUserEdit]);
+
+  console.log(dataUserEdit);
 
   return (
     <>
       <Modal show={show} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Add User</Modal.Title>
+          <Modal.Title>Edit User</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <div className="body-add-new">
@@ -58,8 +53,8 @@ function ModelAddNew(prop) {
           <Button variant="secondary" onClick={handleClose}>
             Close
           </Button>
-          <Button variant="primary" onClick={handleSave}>
-            Save Changes
+          <Button variant="primary" onClick={handleEdit}>
+            Confirm
           </Button>
         </Modal.Footer>
       </Modal>
@@ -67,4 +62,4 @@ function ModelAddNew(prop) {
   );
 }
 
-export default ModelAddNew;
+export default ModalEditUser;

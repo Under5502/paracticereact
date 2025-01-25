@@ -1,12 +1,32 @@
 import { useEffect, useState } from "react";
 import Table from "react-bootstrap/Table";
-import fetchAllUser from "../services/UserServices";
+import { fetchAllUser } from "../services/UserServices";
 import ReactPaginate from "react-paginate";
+import ModalAddNew from "./ModalAddNew";
+import ModalEditUser from "./ModalEditUser";
 
 function TableUsers(prop) {
   const [listUser, setListUser] = useState([]);
   const [totalUser, setTotalUser] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
+
+  const [isShowModal, setIsShowModal] = useState(false);
+  const [isShowModalEdit, setIsShowModalEdit] = useState(false);
+  const [dataUserEdit, setDataUserEdit] = useState({});
+
+  const handleEditUser = (user) => {
+    setDataUserEdit(user);
+    setIsShowModalEdit(true);
+  };
+
+  const handleUpdate = (user) => {
+    setListUser([user, ...listUser]);
+  };
+
+  const handleClose = () => {
+    setIsShowModal(false);
+    setIsShowModalEdit(false);
+  };
 
   useEffect(() => {
     //call api
@@ -30,6 +50,20 @@ function TableUsers(prop) {
 
   return (
     <>
+      <div className="my-3 add-new">
+        <span>
+          <b>List User</b>
+        </span>
+        <button
+          className="btn btn-success"
+          onClick={() => {
+            setIsShowModal(true);
+          }}
+        >
+          Add New User
+        </button>
+      </div>
+
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
@@ -37,6 +71,7 @@ function TableUsers(prop) {
             <th>Email</th>
             <th>First Name</th>
             <th>Last Name</th>
+            <th>Action</th>
           </tr>
         </thead>
         <tbody>
@@ -49,6 +84,17 @@ function TableUsers(prop) {
                   <td>{item.email}</td>
                   <td>{item.first_name}</td>
                   <td>{item.last_name}</td>
+                  <td>
+                    <button
+                      className="btn btn-warning mx-3"
+                      onClick={() => {
+                        handleEditUser(item);
+                      }}
+                    >
+                      Edit
+                    </button>
+                    <button className="btn btn-danger">Delete</button>
+                  </td>
                 </tr>
               );
             })}
@@ -71,6 +117,17 @@ function TableUsers(prop) {
         nextClassName="page-item"
         nextLinkClassName="page-link"
         activeClassName="active"
+      />
+
+      <ModalAddNew
+        show={isShowModal}
+        handleClose={handleClose}
+        handleUpdate={handleUpdate}
+      />
+      <ModalEditUser
+        show={isShowModalEdit}
+        dataUserEdit={dataUserEdit}
+        handleClose={handleClose}
       />
     </>
   );
